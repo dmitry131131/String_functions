@@ -6,18 +6,15 @@
 
 int puts_custom(const char* string)
 {   
-    if (string)
-    {
-        while (*string != '\0')
-        {
-            if (putchar(*string) == EOF) return EOF;
-            
-            string++;
-        }
+    if (!string) return EOF;
 
-        if (putchar('\n') == EOF) return EOF;
+    while (*string != '\0')
+    {
+        if (putchar(*string) == EOF) return EOF;
+        string++;
     }
-    else return EOF;
+
+    if (putchar('\n') == EOF) return EOF;
 
     return 0;
 }
@@ -29,7 +26,6 @@ const char* strchr_custom(const char* string, int ch)
     while (*string != '\0')
     {
         if (*string == ch) return string;
-
         string++;
     }
 
@@ -38,13 +34,10 @@ const char* strchr_custom(const char* string, int ch)
 
 size_t strlen_custom(const char* string)
 {
-    size_t len = 0;
-    while (*string != '\0')
-    {
-        len++;
-        string++;
-    }
-    return len;
+    const char* strStart =  string;
+    while (*(string) != '\0') string++;
+
+    return string - strStart;
 }
 
 char* strcpy_custom(char* destination, const char* source)
@@ -55,9 +48,7 @@ char* strcpy_custom(char* destination, const char* source)
 
     while (*source != '\0')
     {
-        *destination = *source;
-        destination++;
-        source++;
+        *destination++ = *source++;
     }
 
     *destination = *source;
@@ -73,13 +64,9 @@ char* strncpy_custom(char* destination, const char* source, size_t n)
 
     while ((*source != '\0') && (n))
     {
-        *destination = *source;
-        destination++;
-        source++;
+        *destination++ = *source++;
         n--;
     }
-
-    *destination = '\0';
 
     while (n)
     {
@@ -97,16 +84,9 @@ char* strcat_custom(char* destination, const char* append)
 
     char* ptr = destination;
 
-    while (*destination != '\0') destination++;
+    destination += strlen_custom(destination);
 
-    while (*append != '\0')
-    {
-        *destination = *append;
-        destination++;
-        append++;
-    }
-
-    *destination = *append;
+    strcpy_custom(destination, append);
 
     return ptr;
 }
@@ -117,38 +97,22 @@ char* strncat_custom(char* destination, const char* append, size_t n)
 
     char* ptr = destination;
 
-    while (*destination != '\0') destination++;
+    destination += strlen_custom(destination);
 
-    while ((*append != '\0') && (n))
-    {
-        *destination = *append;
-        destination++;
-        append++;
-        n--;
-    }
-
-    *destination = '\0';
-
-    while (n)
-    {
-        *destination = '\0';
-        destination++;
-        n--;
-    }
+    strncpy_custom(destination, append, n);
 
     return ptr;
 }
 
 char* fgets_custom(char* string, int n, FILE* stream)
 {
-    if ((string == NULL) || (stream == NULL)) return NULL;
+    if ((string == NULL) || (stream == NULL) || (feof(stream))) return NULL;
 
     int ch = 0;
     char* ptr = string;
-    while (((ch = getc(stream)) != '\n') && n && (ch != EOF))
+    while (((ch = getc(stream)) != '\n') && (n - 1) && (ch != EOF))
     {
-        *string = (char) ch;
-        string++;
+        *string++ = (char) ch;
         n--;
     }
 
@@ -161,71 +125,66 @@ char* strdup_custom(const char* string)
 {
     if (string == NULL) return NULL;
     
-    int len = 0;
-    const char* str = string;
-    while (*str != '\0')
-    {
-        len++;
-        str++;
-    }
+    size_t len = strlen_custom(string);
 
     char* ptr = (char*) calloc(len + 1, sizeof(char));
 
-    for (int i = 0; i < len + 1; i++)
-    {
-        *(ptr + i) = *string;
-        string++;
-    }
+    strcpy_custom(ptr, string);
 
     return ptr;
 }
 
 size_t getline_custom(char** string, size_t* n, FILE* stream)
 {
-    int ch = 0;
-    *n = 0;
-
-    *string = (char*) calloc(1, sizeof(char));
-
-    while (((ch = getc(stream)) != '\n') && (ch != EOF))
+    size_t MemorySizeCount = 1;
+    if (!(*string))
     {
-        realloc(*string, (*n + 1)*sizeof(char));
-        (*string)[*n] = (char) ch;
-        (*n)++;
-    }
-    if (ch == '\n') 
-    {
-        realloc(*string, (*n + 2)*sizeof(char));
-        (*string)[*n] = '\n';
-        (*string)[*n + 1] = '\0';
-        (*n) += 2;
-    }
-    else
-    {
-        realloc(*string, (*n + 1)*sizeof(char));
-        (*string)[*n] = '\0';
-        (*n)++;
+        *string = (char*) calloc(MinMemorySize, sizeof(char));
+        *n = MinMemorySize;
+        MemorySizeCount++;
     }
 
-    return *n;
+    size_t i = 0;
+    int ch = getc(stream);
+    if (ch == EOF) return -1;
+
+    do
+    {
+        (*string)[i] = (char) ch;
+        i++;
+
+        if (i == *n)
+        { 
+            *string = (char*) realloc(*string, MemorySizeCount * MinMemorySize * sizeof(char));
+            *n = MinMemorySize * MemorySizeCount;
+            MemorySizeCount++;
+        }
+
+    } while ((ch = getc(stream)) != '\n' && (ch != EOF) && (i <= *n));
+
+    (*string)[i] = '\0';
+
+    return i;
 }
 
 char* strstr_custom(const char* strB, const char* strA)
 {
-    unsigned int LenA = 0;
-    while (*(strA + LenA) != '\0') LenA++;
+    size_t LenA = strlen_custom(strA);
+    size_t LenB = strlen_custom(strB);
 
-    unsigned int i = 0;
-    while (*strB != '\0')
+    size_t i = 0;
+    while (*strB != '\0' && (LenB > 0))
     {
         if (*(strB + i) == *(strA + i))
         {
             i++;
         }
+
         else
         {
+            strB += i + 1;
+            LenB -= (i + 1);
             i = 0;
-            strB++;
         }
 
         if (i == LenA)

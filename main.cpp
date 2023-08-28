@@ -6,11 +6,20 @@
 
 int main()
 {
-    char* t = NULL;
+    /*
+    char* tex = (char*) calloc(2, sizeof(char));
+    size_t n = 2;
 
-    t = strstr_custom("0123456789", "3");
+    printf("%d\n", getline_custom(&tex, &n, stdin));
 
-    printf("%s", t);
+    printf("%d\n", n);
+
+    printf("%s", tex);
+
+    free(tex);
+    */
+
+    printf("%s", strstr_custom("0123456789", "5678"));
 
     return 0;
 }

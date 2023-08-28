@@ -2,6 +2,9 @@
  * @file
  * @brief Custom string functions
 */
+
+const size_t MinMemorySize = 256;
+
 /**
  * @brief Function put string in stdout flow and put '\n' symbol in the end of string
  * @param [in] string string pointer
