@@ -6,15 +6,15 @@
 
 int main()
 {
-    char rexr[20] = "ddde33";
-    char rext[] = "5555";
-    char text[30] = {};
+    char* t = NULL;
 
-    char* pp = strdup_custom(rexr);
+    getline_custom(&t, 5, stdin);
 
-    puts_custom(pp);
+    printf("%s", t);
 
-    free(pp);
+    printf("fff\n");
+
+    free(t);
 
     return 0;
 }

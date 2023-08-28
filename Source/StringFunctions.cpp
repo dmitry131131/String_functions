@@ -143,7 +143,7 @@ char* fgets_custom(char* string, int n, FILE* stream)
 {
     if ((string == NULL) || (stream == NULL)) return NULL;
 
-    int ch;
+    int ch = 0;
     char* ptr = string;
     while (((ch = getc(stream)) != '\n') && n && (ch != EOF))
     {
@@ -158,7 +158,7 @@ char* fgets_custom(char* string, int n, FILE* stream)
 }
 
 char* strdup_custom(const char* string)
-{ 
+{
     if (string == NULL) return NULL;
     int len = 0;
     const char* str = string;
@@ -177,4 +177,24 @@ char* strdup_custom(const char* string)
     }
 
     return ptr;
+}
+
+size_t getline_custom(char** string, size_t n, FILE* stream)
+{
+    int ch = 0;
+    *string = (char*) calloc(n + 1, sizeof(char));
+    size_t i = 0;
+
+    while (((ch = getc(stream)) != '\n') && (ch != EOF) && n)
+    {
+        (*string)[i] = (char) ch;
+        i++;
+        n--;
+    }
+
+    if (!i) return -1;
+
+    (*string)[i] = '\0';
+
+    return i;
 }

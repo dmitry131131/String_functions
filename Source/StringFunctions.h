@@ -65,3 +65,11 @@ char* fgets_custom(char* string, int n, FILE* stream);
  * @return pointer to dublicate string
 */
 char* strdup_custom(const char* string);
+/**
+ * @brief Gets string from stream, allocs memory for string put pointer to memory to string and returns len of memory
+ * @param [out] string pointer to alloced symbol array 
+ * @param [in] n size of symbols array
+ * @param [in] stream input flow
+ * @return Size of alloced memory  
+*/
+size_t getline_custom(char** string, size_t n, FILE* stream);
