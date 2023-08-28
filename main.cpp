@@ -8,13 +8,9 @@ int main()
 {
     char* t = NULL;
 
-    getline_custom(&t, 5, stdin);
+    t = strstr_custom("0123456789", "3");
 
     printf("%s", t);
-
-    printf("fff\n");
-
-    free(t);
 
     return 0;
 }

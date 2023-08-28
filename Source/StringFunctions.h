@@ -72,4 +72,6 @@ char* strdup_custom(const char* string);
  * @param [in] stream input flow
  * @return Size of alloced memory  
 */
-size_t getline_custom(char** string, size_t n, FILE* stream);
+size_t getline_custom(char** string, size_t* n, FILE* stream);
+
+char* strstr_custom(const char* strB, const char* strA);

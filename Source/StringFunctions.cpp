@@ -160,6 +160,7 @@ char* fgets_custom(char* string, int n, FILE* stream)
 char* strdup_custom(const char* string)
 {
     if (string == NULL) return NULL;
+    
     int len = 0;
     const char* str = string;
     while (*str != '\0')
@@ -179,22 +180,60 @@ char* strdup_custom(const char* string)
     return ptr;
 }
 
-size_t getline_custom(char** string, size_t n, FILE* stream)
+size_t getline_custom(char** string, size_t* n, FILE* stream)
 {
     int ch = 0;
-    *string = (char*) calloc(n + 1, sizeof(char));
-    size_t i = 0;
+    *n = 0;
 
-    while (((ch = getc(stream)) != '\n') && (ch != EOF) && n)
+    *string = (char*) calloc(1, sizeof(char));
+
+    while (((ch = getc(stream)) != '\n') && (ch != EOF))
     {
-        (*string)[i] = (char) ch;
-        i++;
-        n--;
+        realloc(*string, (*n + 1)*sizeof(char));
+        (*string)[*n] = (char) ch;
+        (*n)++;
+    }
+    if (ch == '\n') 
+    {
+        realloc(*string, (*n + 2)*sizeof(char));
+        (*string)[*n] = '\n';
+        (*string)[*n + 1] = '\0';
+        (*n) += 2;
+    }
+    else
+    {
+        realloc(*string, (*n + 1)*sizeof(char));
+        (*string)[*n] = '\0';
+        (*n)++;
     }
 
-    if (!i) return -1;
+    return *n;
+}
 
-    (*string)[i] = '\0';
+char* strstr_custom(const char* strB, const char* strA)
+{
+    unsigned int LenA = 0;
+    while (*(strA + LenA) != '\0') LenA++;
 
-    return i;
+    unsigned int i = 0;
+    while (*strB != '\0')
+    {
+        if (*(strB + i) == *(strA + i))
+        {
+            i++;
+        }
+        else
+        {
+            i = 0;
+            strB++;
+        }
+
+        if (i == LenA)
+        {
+            char* StrPtr = (char*) strB;
+            return StrPtr;
+        }
+    }
+
+    return NULL;
 }
