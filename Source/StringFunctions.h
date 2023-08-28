@@ -2,7 +2,7 @@
  * @file
  * @brief Custom string functions
 */
-
+/// realloc memory step
 const size_t MinMemorySize = 256;
 
 /**
@@ -76,5 +76,18 @@ char* strdup_custom(const char* string);
  * @return Size of alloced memory  
 */
 size_t getline_custom(char** string, size_t* n, FILE* stream);
+/**
+ * @brief Function find strA in strB and return pointer to first found
+ * @param [in] strB string where function find strA
+ * @param [in] strA searched string
+ * @return pointer to first found of strA in strB
+*/
+const char* strstr_custom(const char* strB, const char* strA);
 
-char* strstr_custom(const char* strB, const char* strA);
+const char* strstrh_custom(const char* strB, const char* strA);
+
+int hash(const char* str, size_t len);
+
+int strCompare(const char* first, const char* second, size_t len);
+
+int strstrC_custom(const char* text, const char* pattern);

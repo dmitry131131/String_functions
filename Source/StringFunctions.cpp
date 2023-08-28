@@ -46,12 +46,10 @@ char* strcpy_custom(char* destination, const char* source)
 
     char* ptr = destination;
 
-    while (*source != '\0')
+    do
     {
         *destination++ = *source++;
-    }
-
-    *destination = *source;
+    } while (*source != '\0');
 
     return ptr;
 }
@@ -70,8 +68,7 @@ char* strncpy_custom(char* destination, const char* source, size_t n)
 
     while (n)
     {
-        *destination = '\0';
-        destination++;
+        *destination++ = '\0';
         n--;
     }
 
@@ -136,7 +133,7 @@ char* strdup_custom(const char* string)
 
 size_t getline_custom(char** string, size_t* n, FILE* stream)
 {
-    size_t MemorySizeCount = 1;
+    size_t MemorySizeCount = ((size_t) *n / MinMemorySize) + 1;
     if (!(*string))
     {
         *string = (char*) calloc(MinMemorySize, sizeof(char));
@@ -155,7 +152,7 @@ size_t getline_custom(char** string, size_t* n, FILE* stream)
 
         if (i == *n)
         { 
-            *string = (char*) realloc(*string, MemorySizeCount * MinMemorySize * sizeof(char));
+            *string = (char*) realloc(*string, (MemorySizeCount * MinMemorySize) * sizeof(char));
             *n = MinMemorySize * MemorySizeCount;
             MemorySizeCount++;
         }
@@ -167,32 +164,81 @@ size_t getline_custom(char** string, size_t* n, FILE* stream)
     return i;
 }
 
-char* strstr_custom(const char* strB, const char* strA)
+const char* strstr_custom(const char* strB, const char* strA)
 {
-    size_t LenA = strlen_custom(strA);
-    size_t LenB = strlen_custom(strB);
+    size_t LenA = 0;
+    while (*(strA + LenA) != '\0') LenA++;
 
     size_t i = 0;
-    while (*strB != '\0' && (LenB > 0))
+    while (*strB != '\0')
     {
         if (*(strB + i) == *(strA + i))
         {
             i++;
         }
-
         else
         {
-            strB += i + 1;
-            LenB -= (i + 1);
             i = 0;
+            strB++;
         }
 
         if (i == LenA)
         {
-            char* StrPtr = (char*) strB;
-            return StrPtr;
+            return strB;
         }
     }
 
     return NULL;
+}
+
+const char* strstrh_custom(const char* text, const char* pattern)
+{
+    size_t PatternLen = strlen_custom(pattern);
+    int hashP = hash(pattern, PatternLen);
+    int hashT = hash(text, PatternLen);
+
+    while (*(text) != '\0')
+    {
+        if (hashP == hashT)
+        {
+            if (strCompare(text, pattern, PatternLen)) return text;
+        }
+        hashT = ((hashT * (*(text + PatternLen))) / *(text));
+        text++;
+    }
+
+    return NULL;
+}
+
+int hash(const char* str, size_t len)
+{
+    int has = 1;
+    for (size_t i = 0; i < len; i++)
+    {
+        has *= *(str + i);
+    }
+
+    return has;
+}
+
+int strCompare(const char* first, const char* second, size_t len)
+{
+    for (size_t i = 0; i < len; i++)
+    {
+        if (*(first + i) != *(second + i)) return 0;
+    }
+
+    return 1;
+}
+
+int strstrC_custom(const char* text, const char* pattern)
+{
+    const char* ptr = text - 1;
+    int count = 0;
+    while ((ptr = strstrh_custom(ptr + 1, pattern)))
+    {
+        count++;
+    }
+
+    return count;
 }

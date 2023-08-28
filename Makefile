@@ -7,6 +7,7 @@ CXXFLAGS =  -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-
 			-D_DEBUG -D_EJUDGE_CLIENT_SIDE
 TARGET = main
 SourceFolder = Source
+BuildFolder = build
 
 Sources = StringFunctions.cpp
 Main = main.cpp
@@ -17,8 +18,11 @@ all : $(TARGET)
 
 Source = $(addprefix $(SourceFolder)\, $(Sources))
 
+#objects : $(Source) $(Main)
+	# $(CXX) $(CXXFLAGS) -c $^ -o build\$@
+
 $(TARGET) : $(Source)
 	$(CXX) $(CXXFLAGS) $(Main) $^ -o $@
 
 clean :
-	rm $(TARGET)
+	rm $(TARGET) *.o
