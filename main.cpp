@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <ctime>
 
-#include "Source\StringFunctions.h"
+#include "Source\StringFunctions.h" // TODO use -Iinclude flag for makefile
 
 int main()
 {
@@ -19,7 +19,7 @@ int main()
 
     free(tex);
     */
-
+   
    const char* text = " Those hours that with gentle work did frame\n"
                         "The lovely gaze where every eye doth dwell\n"
                         "Will play the tyrants to the very same,\n"
@@ -48,10 +48,33 @@ int main()
                         "Leaving thee living in posterity?\n"
                         "Be not self-willed, for thou art much too fair\n"
                         "To be death's conquest and make worms thine heir.";
+    
+    const char* inp = input(); 
 
-    printf("%d\n", strstrC_custom(text, "That's for thyself to breedanother the"));
+    int time = 0;
+    for (int i = 0; i < TEST_COUNT; i++)
+    {
+        int start = clock();
+        strstr_c_custom(inp, text, BAD_ALG);
+        int end   = clock();
 
-    printf("%d", (clock()));
+        time += (end - start);
+    }
+
+    printf("Bad alg: %d\n", (int) time/TEST_COUNT);
+
+    time = 0;
+
+    for (int i = 0; i < TEST_COUNT; i++)
+    {
+        int start = clock();
+        strstr_c_custom(inp, text, BETTER_ALG);
+        int end   = clock();
+
+        time += (end - start);
+    }
+
+    printf("Better alg: %d\n", (int) time/TEST_COUNT);
 
     return 0;
 }

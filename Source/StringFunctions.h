@@ -3,7 +3,16 @@
  * @brief Custom string functions
 */
 /// realloc memory step
-const size_t MinMemorySize = 256;
+const size_t MIN_MEMORY_SIZE = 256;
+
+const int TEST_COUNT = 200;
+
+const size_t BUFFER_SIZE = 20000000;
+
+enum TestMode {
+    BAD_ALG = 0,
+    BETTER_ALG = 1
+};
 
 /**
  * @brief Function put string in stdout flow and put '\n' symbol in the end of string
@@ -84,10 +93,12 @@ size_t getline_custom(char** string, size_t* n, FILE* stream);
 */
 const char* strstr_custom(const char* strB, const char* strA);
 
-const char* strstrh_custom(const char* strB, const char* strA);
+const char* strstr_h_custom(const char* strB, const char* strA);
 
 int hash(const char* str, size_t len);
 
 int strCompare(const char* first, const char* second, size_t len);
 
-int strstrC_custom(const char* text, const char* pattern);
+int strstr_c_custom(const char* text, const char* pattern, enum TestMode Mode);
+
+char* input();

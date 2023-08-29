@@ -133,12 +133,12 @@ char* strdup_custom(const char* string)
 
 size_t getline_custom(char** string, size_t* n, FILE* stream)
 {
-    size_t MemorySizeCount = ((size_t) *n / MinMemorySize) + 1;
+    size_t memorySizeCount = ((size_t) *n / MIN_MEMORY_SIZE) + 1;
     if (!(*string))
     {
-        *string = (char*) calloc(MinMemorySize, sizeof(char));
-        *n = MinMemorySize;
-        MemorySizeCount++;
+        *string = (char*) calloc(MIN_MEMORY_SIZE, sizeof(char));
+        *n = MIN_MEMORY_SIZE;
+        memorySizeCount++;
     }
 
     size_t i = 0;
@@ -152,9 +152,9 @@ size_t getline_custom(char** string, size_t* n, FILE* stream)
 
         if (i == *n)
         { 
-            *string = (char*) realloc(*string, (MemorySizeCount * MinMemorySize) * sizeof(char));
-            *n = MinMemorySize * MemorySizeCount;
-            MemorySizeCount++;
+            *string = (char*) realloc(*string, (memorySizeCount * MIN_MEMORY_SIZE) * sizeof(char));
+            *n = MIN_MEMORY_SIZE * memorySizeCount;
+            memorySizeCount++;
         }
 
     } while ((ch = getc(stream)) != '\n' && (ch != EOF) && (i <= *n));
@@ -166,8 +166,7 @@ size_t getline_custom(char** string, size_t* n, FILE* stream)
 
 const char* strstr_custom(const char* strB, const char* strA)
 {
-    size_t LenA = 0;
-    while (*(strA + LenA) != '\0') LenA++;
+    size_t lenA = strlen_custom(strA);
 
     size_t i = 0;
     while (*strB != '\0')
@@ -182,7 +181,7 @@ const char* strstr_custom(const char* strB, const char* strA)
             strB++;
         }
 
-        if (i == LenA)
+        if (i == lenA)
         {
             return strB;
         }
@@ -191,19 +190,23 @@ const char* strstr_custom(const char* strB, const char* strA)
     return NULL;
 }
 
-const char* strstrh_custom(const char* text, const char* pattern)
+const char* strstr_h_custom(const char* text, const char* pattern)
 {
-    size_t PatternLen = strlen_custom(pattern);
-    int hashP = hash(pattern, PatternLen);
-    int hashT = hash(text, PatternLen);
+    size_t patternLen = strlen_custom(pattern);
+
+    int hashP = hash(pattern, patternLen);
+    int hashT = hash(text, patternLen);
+
+    if (hashT == -1) return NULL; // TODO enum
 
     while (*(text) != '\0')
     {
         if (hashP == hashT)
         {
-            if (strCompare(text, pattern, PatternLen)) return text;
+            if (strCompare(text, pattern, patternLen)) return text;
         }
-        hashT = ((hashT * (*(text + PatternLen))) / *(text));
+
+        hashT = (int) ((hashT + (*(text + patternLen))) - (*(text)));
         text++;
     }
 
@@ -212,10 +215,11 @@ const char* strstrh_custom(const char* text, const char* pattern)
 
 int hash(const char* str, size_t len)
 {
-    int has = 1;
+    int has = 0;
     for (size_t i = 0; i < len; i++)
     {
-        has *= *(str + i);
+        if (*(str + i) == '\0') return -1; // TODO error
+        has = has + (*(str + i));
     }
 
     return has;
@@ -231,14 +235,40 @@ int strCompare(const char* first, const char* second, size_t len)
     return 1;
 }
 
-int strstrC_custom(const char* text, const char* pattern)
+int strstr_c_custom(const char* text, const char* pattern, enum TestMode Mode)
 {
     const char* ptr = text - 1;
     int count = 0;
-    while ((ptr = strstrh_custom(ptr + 1, pattern)))
+   
+    if (Mode == BETTER_ALG)
     {
-        count++;
+        while ((ptr = strstr_h_custom(ptr + 1, pattern)))
+        {
+            count++;
+        }
+    }
+    else
+    {
+        while ((ptr = strstr_custom(ptr + 1, pattern)))
+        {
+            count++;
+        }
     }
 
     return count;
+}
+
+char* input()
+{
+    char* text = (char*) calloc(BUFFER_SIZE , sizeof(char));
+    char* ptr = text;
+    int ch = 0;
+    while ((ch = getchar()) != EOF)
+    {
+        *text++ = (char) ch;
+    }
+
+    *text = '\0';
+
+    return ptr;
 }
