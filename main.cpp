@@ -49,7 +49,7 @@ int main()
                         "Be not self-willed, for thou art much too fair\n"
                         "To be death's conquest and make worms thine heir.";
     
-    const char* inp = input(); 
+    char* inp = input(); 
 
     int time = 0;
     for (int i = 0; i < TEST_COUNT; i++)
@@ -76,5 +76,7 @@ int main()
 
     printf("Better alg: %d\n", (int) time/TEST_COUNT);
 
+    free(inp);
+    
     return 0;
 }
