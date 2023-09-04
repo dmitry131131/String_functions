@@ -9,20 +9,29 @@ TARGET = main
 SourceFolder = Source
 BuildFolder = build
 
-Sources = StringFunctions.cpp
+Sources = StringFunctions.cpp MatrixFunctions.cpp
 Main = main.cpp
 
-.PHONY : all clean
+.PHONY : all clean folder
 
-all : $(TARGET) 
+all : folder $(TARGET)
 
-Source = $(addprefix $(SourceFolder)\, $(Sources))
+Source = $(addprefix $(SourceFolder)/, $(Sources))
+ObjNames = $(Sources:.cpp=.o) $(Main:.cpp=.o)
+MainObject = $(addprefix $(BuildFolder)/, $(Main:.cpp=.o))
 
-#objects : $(Source) $(Main)
-	# $(CXX) $(CXXFLAGS) -c $^ -o build\$@
+objects = $(addprefix $(BuildFolder)/, $(ObjNames))
 
-$(TARGET) : $(Source)
-	$(CXX) $(CXXFLAGS) $(Main) $^ -o $@
+$(addprefix $(BuildFolder)/, $(ObjNames)): $(BuildFolder)/%.o: $(SourceFolder)/%.cpp
+	@echo [CXX] -c $< -o $@
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(TARGET) : $(objects) $(MainObject)
+	@echo [CC] $^ -o $@
+	@$(CXX) $(CXXFLAGS) $^ -o $@
 
 clean :
-	rm $(TARGET) *.o
+	rm $(TARGET).exe *.o
+
+folder :
+	mkdir -p $(BuildFolder)

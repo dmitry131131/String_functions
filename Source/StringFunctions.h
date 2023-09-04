@@ -97,7 +97,7 @@ const char* strstr_h_custom(const char* strB, const char* strA);
 
 int hash(const char* str, size_t len);
 
-int strCompare(const char* first, const char* second, size_t len);
+int str_compare(const char* first, const char* second, size_t len);
 
 int strstr_c_custom(const char* text, const char* pattern, enum TestMode Mode);
 

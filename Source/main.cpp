@@ -3,10 +3,23 @@
 #include <stdlib.h>
 #include <ctime>
 
-#include "Source\StringFunctions.h" // TODO use -Iinclude flag for makefile
+#include "StringFunctions.h" // TODO use -Iinclude flag for makefile
+#include "MatrixFunctions.h"
 
 int main()
 {
+
+    int* arr = triangle_arr_input(3, stdin);
+
+    if (!arr)
+    {
+        printf("input error\n");
+        return 0;
+    }
+
+    triangle_arr_output(3, arr, stdout);
+
+    free(arr);
     /*
     char* tex = (char*) calloc(258, sizeof(char));
     size_t n = 258;
@@ -20,6 +33,7 @@ int main()
     free(tex);
     */
    
+   /*
    const char* text = " Those hours that with gentle work did frame\n"
                         "The lovely gaze where every eye doth dwell\n"
                         "Will play the tyrants to the very same,\n"
@@ -77,6 +91,8 @@ int main()
     printf("Better alg: %d\n", (int) time/TEST_COUNT);
 
     free(inp);
+
+    */
     
     return 0;
 }

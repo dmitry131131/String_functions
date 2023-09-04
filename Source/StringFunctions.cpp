@@ -203,7 +203,7 @@ const char* strstr_h_custom(const char* text, const char* pattern)
     {
         if (hashP == hashT)
         {
-            if (strCompare(text, pattern, patternLen)) return text;
+            if (str_compare(text, pattern, patternLen)) return text;
         }
 
         hashT = (int) ((hashT + (*(text + patternLen))) - (*(text)));
@@ -212,6 +212,7 @@ const char* strstr_h_custom(const char* text, const char* pattern)
 
     return NULL;
 }
+
 
 int hash(const char* str, size_t len)
 {
@@ -225,7 +226,7 @@ int hash(const char* str, size_t len)
     return has;
 }
 
-int strCompare(const char* first, const char* second, size_t len)
+int str_compare(const char* first, const char* second, size_t len)
 {
     for (size_t i = 0; i < len; i++)
     {
