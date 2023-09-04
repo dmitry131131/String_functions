@@ -273,3 +273,32 @@ char* input()
 
     return ptr;
 }
+
+char** text_lines(FILE* stream)
+{
+    char** text = (char**) calloc(1024, sizeof(char*));
+
+    char** textPointer = text;
+
+    char buffer[STRING_BUFFER_SIZE] = {};
+
+    while (fgets_custom(buffer, STRING_BUFFER_SIZE, stream))
+    {
+        size_t line_size = strlen_custom(buffer);
+        *text = (char*) calloc(line_size, sizeof(char));
+
+        for(size_t i = 0; i < line_size; i++)
+        {
+            (*text)[i] = buffer[i];
+        }
+
+        text++;
+    }
+
+    return textPointer;
+}
+
+int text_output(char** text, FILE* stream)
+{
+
+}

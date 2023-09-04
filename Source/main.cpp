@@ -8,6 +8,15 @@
 
 int main()
 {
+
+    FILE* file = fopen("t.txt", "r");
+
+    char** text = text_lines(file);
+
+    printf("%s", text[2]);
+
+
+
     /*
     int* arr = triangle_arr_input(3, stdin);
 
@@ -22,6 +31,7 @@ int main()
     free(arr);
     */
 
+    /*
     int array[] =  {3, 3,
                     'F', 2, 3,
                     4, 5, 65,
@@ -29,6 +39,7 @@ int main()
     };
 
     rect_arr_meta_output(array, stdout);
+    */
 
     /*
     char* tex = (char*) calloc(258, sizeof(char));

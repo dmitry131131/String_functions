@@ -7,6 +7,8 @@ const size_t MIN_MEMORY_SIZE = 256;
 
 const int TEST_COUNT = 200;
 
+const size_t STRING_BUFFER_SIZE = 2000;
+
 const size_t BUFFER_SIZE = 20000000;
 
 enum TestMode {
@@ -64,7 +66,7 @@ char* strcat_custom(char* destination, const char* append);
 */
 char* strncat_custom(char* destination, const char* append, size_t n);
 /**
- * @brief Read first n symbols of string ot until found '\n'
+ * @brief Read first n symbols of string or until found '\n'
  * @param [in] string target symbol array 
  * @param [in] n max length of string
  * @param [in] stream input flow
@@ -102,3 +104,5 @@ int str_compare(const char* first, const char* second, size_t len);
 int strstr_c_custom(const char* text, const char* pattern, enum TestMode Mode);
 
 char* input();
+
+char** text_lines(FILE* stream);
