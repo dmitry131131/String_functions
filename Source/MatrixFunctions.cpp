@@ -39,7 +39,7 @@ char* rect_arr_input(size_t rows, size_t cols, FILE* stream)
     return str;
 }
 
-int rect_arr_output(size_t rows, size_t cols, const char* array, FILE* stream)
+int rect_arr_output(size_t rows, size_t cols, const int* array, FILE* stream)
 {
     if (!array) return 1;
 
@@ -51,7 +51,7 @@ int rect_arr_output(size_t rows, size_t cols, const char* array, FILE* stream)
         {
             assert(j < cols);
             
-            putc(*(array + (i * cols) + j), stream);
+            dual_char_output(array_getter(i, j, cols, array), stream);
         }
         putc('\n', stream);
 
@@ -88,6 +88,26 @@ int triangle_arr_output(size_t rows, const int* array, FILE* stream)
         }
         fprintf(stream, "\n");
     }
+
+    return 0;
+}
+
+int array_getter(int row, int num, int cols, const int* array)
+{
+    return *(array + (row * cols) + num);
+}
+
+void dual_char_output(int symbol, FILE* stream)
+{
+    fprintf(stream, "%c(%-3d)", symbol, symbol);
+}
+
+int rect_arr_meta_output(const int* array, FILE* stream)
+{
+    size_t rows = (size_t) array[0];
+    size_t cols = (size_t) array[1];
+
+    rect_arr_output(rows, cols, (array + 2), stream);
 
     return 0;
 }

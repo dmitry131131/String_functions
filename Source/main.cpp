@@ -8,7 +8,7 @@
 
 int main()
 {
-
+    /*
     int* arr = triangle_arr_input(3, stdin);
 
     if (!arr)
@@ -20,6 +20,16 @@ int main()
     triangle_arr_output(3, arr, stdout);
 
     free(arr);
+    */
+
+    int array[] =  {3, 3,
+                    'F', 2, 3,
+                    4, 5, 65,
+                    66, 67, 69
+    };
+
+    rect_arr_meta_output(array, stdout);
+
     /*
     char* tex = (char*) calloc(258, sizeof(char));
     size_t n = 258;
