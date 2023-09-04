@@ -97,6 +97,15 @@ int array_getter(int row, int num, int cols, const int* array)
     return *(array + (row * cols) + num);
 }
 
+int array_setter(int row, int num, int cols, int* array, int value)
+{
+    int oldValue = *(array + (row * cols) + num);
+
+    *(array + (row * cols) + num) = value;
+
+    return oldValue;
+}
+
 void dual_char_output(int symbol, FILE* stream)
 {
     fprintf(stream, "%c(%-3d)", symbol, symbol);
