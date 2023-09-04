@@ -106,3 +106,5 @@ int strstr_c_custom(const char* text, const char* pattern, enum TestMode Mode);
 char* input();
 
 char** text_lines(FILE* stream);
+
+int text_output(char** text, FILE* stream);

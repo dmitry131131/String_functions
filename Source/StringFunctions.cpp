@@ -143,7 +143,7 @@ size_t getline_custom(char** string, size_t* n, FILE* stream)
 
     size_t i = 0;
     int ch = getc(stream);
-    if (ch == EOF) return -1;
+    if (ch == EOF) return 0;
 
     do
     {
@@ -278,21 +278,23 @@ char** text_lines(FILE* stream)
 {
     char** text = (char**) calloc(1024, sizeof(char*));
 
+    size_t n = 0;
+
     char** textPointer = text;
 
-    char buffer[STRING_BUFFER_SIZE] = {};
-
-    while (fgets_custom(buffer, STRING_BUFFER_SIZE, stream))
-    {
-        size_t line_size = strlen_custom(buffer);
-        
-        *text++ = strdup_custom(buffer);
-    }
+    while (getline_custom(text++, &n, stream)) {}
 
     return textPointer;
 }
 
 int text_output(char** text, FILE* stream)
 {
+    if (!text) return 1;
 
+    while(*text != NULL)
+    {
+        fprintf(stream, "%s\n", *text++);
+    }
+
+    return 0;
 }
