@@ -13,7 +13,7 @@ int main()
 
     char** text = text_lines(file);
 
-    printf("%s", text[2]);
+    printf("%s", text[3]);
 
 
 

@@ -285,14 +285,8 @@ char** text_lines(FILE* stream)
     while (fgets_custom(buffer, STRING_BUFFER_SIZE, stream))
     {
         size_t line_size = strlen_custom(buffer);
-        *text = (char*) calloc(line_size, sizeof(char));
-
-        for(size_t i = 0; i < line_size; i++)
-        {
-            (*text)[i] = buffer[i];
-        }
-
-        text++;
+        
+        *text++ = strdup_custom(buffer);
     }
 
     return textPointer;
