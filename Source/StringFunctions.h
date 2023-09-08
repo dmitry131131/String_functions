@@ -11,6 +11,8 @@ const size_t STRING_BUFFER_SIZE = 2000;
 
 const size_t BUFFER_SIZE = 20000000;
 
+static const char* str_ = "text";
+
 enum TestMode {
     BAD_ALG = 0,
     BETTER_ALG = 1
@@ -97,11 +99,11 @@ const char* strstr_custom(const char* strB, const char* strA);
 
 const char* strstr_h_custom(const char* strB, const char* strA);
 
-int hash(const char* str, size_t len);
+int control_sum(const char* str, size_t len);
 
 int str_compare(const char* first, const char* second, size_t len);
 
-int strstr_c_custom(const char* text, const char* pattern, enum TestMode Mode);
+int strstr_counter(const char* text, const char* pattern, enum TestMode Mode);
 
 char* input();
 

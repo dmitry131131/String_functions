@@ -6,9 +6,11 @@
 #include "StringFunctions.h" // TODO use -Iinclude flag for makefile
 #include "MatrixFunctions.h"
 
+//const char* str_ = "text123";
+
 int main()
 {
-
+    // str_[0] ;
     FILE* file = fopen("t.txt", "r");
 
     char** text = text_lines(file);
@@ -90,7 +92,7 @@ int main()
     for (int i = 0; i < TEST_COUNT; i++)
     {
         int start = clock();
-        strstr_c_custom(inp, text, BAD_ALG);
+        strstr_counter(inp, text, BAD_ALG);
         int end   = clock();
 
         time += (end - start);
@@ -103,7 +105,7 @@ int main()
     for (int i = 0; i < TEST_COUNT; i++)
     {
         int start = clock();
-        strstr_c_custom(inp, text, BETTER_ALG);
+        strstr_counter(inp, text, BETTER_ALG);
         int end   = clock();
 
         time += (end - start);

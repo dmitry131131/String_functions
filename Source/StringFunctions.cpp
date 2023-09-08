@@ -4,6 +4,7 @@
 #include "StringFunctions.h"
 
 
+
 int puts_custom(const char* string)
 {   
     if (!string) return EOF;
@@ -35,7 +36,7 @@ const char* strchr_custom(const char* string, int ch)
 size_t strlen_custom(const char* string)
 {
     const char* strStart =  string;
-    while (*(string) != '\0') string++;
+    while (*string != '\0') string++;
 
     return string - strStart;
 }
@@ -105,12 +106,14 @@ char* fgets_custom(char* string, int n, FILE* stream)
 {
     if ((string == NULL) || (stream == NULL) || (feof(stream))) return NULL;
 
-    int ch = 0;
     char* ptr = string;
-    while (((ch = getc(stream)) != '\n') && (n - 1) && (ch != EOF))
+    int ch = getc(stream);
+    // TODO: remove getc
+    while ((ch != '\n') && (n - 1) && (ch != EOF))
     {
         *string++ = (char) ch;
         n--;
+        ch = getc(stream);
     }
 
     *string = '\0';
@@ -131,8 +134,10 @@ char* strdup_custom(const char* string)
     return ptr;
 }
 
+// string_ptr
 size_t getline_custom(char** string, size_t* n, FILE* stream)
 {
+    // char* string = *string_ptr;
     size_t memorySizeCount = ((size_t) *n / MIN_MEMORY_SIZE) + 1;
     if (!(*string))
     {
@@ -157,7 +162,9 @@ size_t getline_custom(char** string, size_t* n, FILE* stream)
             memorySizeCount++;
         }
 
-    } while ((ch = getc(stream)) != '\n' && (ch != EOF) && (i <= *n));
+    ch = getc(stream);
+    // TODO:
+    } while ((ch != '\n') && (ch != EOF) && (i <= *n));
 
     (*string)[i] = '\0';
 
@@ -194,8 +201,8 @@ const char* strstr_h_custom(const char* text, const char* pattern)
 {
     size_t patternLen = strlen_custom(pattern);
 
-    int hashP = hash(pattern, patternLen);
-    int hashT = hash(text, patternLen);
+    int hashP = control_sum(pattern, patternLen);
+    int hashT = control_sum(text, patternLen);
 
     if (hashT == -1) return NULL; // TODO enum
 
@@ -214,7 +221,8 @@ const char* strstr_h_custom(const char* text, const char* pattern)
 }
 
 
-int hash(const char* str, size_t len)
+// TODO: hash??
+int control_sum(const char* str, size_t len)
 {
     int has = 0;
     for (size_t i = 0; i < len; i++)
@@ -236,7 +244,8 @@ int str_compare(const char* first, const char* second, size_t len)
     return 1;
 }
 
-int strstr_c_custom(const char* text, const char* pattern, enum TestMode Mode)
+// counter
+int strstr_counter(const char* text, const char* pattern, enum TestMode Mode)
 {
     const char* ptr = text - 1;
     int count = 0;
